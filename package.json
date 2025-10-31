@@ -1,0 +1,31 @@
+{
+  "name": "mmox-sensor-notifications",
+  "version": "1.0.0",
+  "description": "MMOX Cybersecurity Alert Management System",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:sensor\" \"npm run dev:notification\" \"npm run dev:email-producer\" \"npm run dev:email-listener\" \"npm run dev:frontend\"",
+    "dev:all": "concurrently --kill-others-on-fail \"npm run dev:sensor\" \"npm run dev:notification\" \"npm run dev:email-producer\" \"npm run dev:email-listener\" \"npm run dev:frontend\"",
+    "dev:all-with-redis": "concurrently --kill-others-on-fail \"npm run redis:start\" \"npm run dev:sensor\" \"npm run dev:notification\" \"npm run dev:email-producer\" \"npm run dev:email-listener\" \"npm run dev:frontend\"",
+    "dev:sensor": "cd services/sensor-monitor && npm run dev",
+    "dev:notification": "cd services/notification-service && npm run dev",
+    "dev:email-producer": "cd services/email-producer && npm run dev",
+    "dev:email-listener": "cd services/email-listener && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "redis:start": "node scripts/start-redis.js",
+    "redis:check": "redis-cli ping",
+    "setup:complete": "npm run install:all && npm run db:setup && npm run db:seed",
+    "install:all": "npm install && cd services/sensor-monitor && npm install && cd ../notification-service && npm install && cd ../email-producer && npm install && cd ../email-listener && npm install && cd ../../frontend && npm install && cd ../shared && npm install && cd ../database && npm install",
+    "db:setup": "cd database && npm run setup",
+    "db:seed": "cd database && npm run seed",
+    "db:migrate": "cd database && npm run migrate",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "health:check": "concurrently \"curl -s http://localhost:3001/health\" \"curl -s http://localhost:3002/health\" \"curl -s http://localhost:3003/health\" \"curl -s http://localhost:3004/health\""
+  },
+  "keywords": ["cybersecurity", "alerts", "notifications", "mmox"],
+  "author": "MMOX Team",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
