@@ -4,7 +4,6 @@
   "description": "Shared utilities for MMOX sensor notifications system",
   "main": "index.js",
   "dependencies": {
-    "mongodb": "^6.3.0",
     "redis": "^4.6.10",
     "dotenv": "^16.3.1"
   }

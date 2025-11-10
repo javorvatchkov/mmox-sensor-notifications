@@ -14,11 +14,8 @@
     "dev:frontend": "cd frontend && npm run dev",
     "redis:start": "node scripts/start-redis.js",
     "redis:check": "redis-cli ping",
-    "setup:complete": "npm run install:all && npm run db:setup && npm run db:seed",
-    "install:all": "npm install && cd services/sensor-monitor && npm install && cd ../notification-service && npm install && cd ../email-producer && npm install && cd ../email-listener && npm install && cd ../../frontend && npm install && cd ../shared && npm install && cd ../database && npm install",
-    "db:setup": "cd database && npm run setup",
-    "db:seed": "cd database && npm run seed",
-    "db:migrate": "cd database && npm run migrate",
+    "setup:complete": "npm run install:all",
+    "install:all": "npm install && cd services/sensor-monitor && npm install && cd ../notification-service && npm install && cd ../email-producer && npm install && cd ../email-listener && npm install && cd ../../frontend && npm install && cd ../shared && npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "health:check": "concurrently \"curl -s http://localhost:3001/health\" \"curl -s http://localhost:3002/health\" \"curl -s http://localhost:3003/health\" \"curl -s http://localhost:3004/health\""
   },

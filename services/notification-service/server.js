@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { ObjectId } = require('mongodb');
+// Removed MongoDB dependency
 require('dotenv').config();
 
 // Import shared utilities
@@ -434,7 +434,7 @@ app.post('/api/send-pending-emails', async (req, res) => {
                 // Get customer details
                 console.log(`🔍 Looking for customer with ID: ${notification.customer_id}`);
                 const customer = await database.collection('customers')
-                    .findOne({ _id: new ObjectId(notification.customer_id) });
+                    .findOne({ _id: notification.customer_id });
                 
                 if (!customer || !customer.email) {
                     console.log(`⚠️ No email found for customer ${notification.customer_id}`);
