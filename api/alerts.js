@@ -39,22 +39,17 @@ function generateMockAlerts(count = 50) {
   return alerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 }
 
-module.exports = async function handler(req, res) {
-  // Enable CORS
+module.exports = function handler(req, res) {
+  // Fast CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
-  // Handle preflight request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  // Handle preflight
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-  
-  try {
+  // Fast execution - no try-catch overhead
     const { 
       limit = 50, 
       severity, 
@@ -116,14 +111,5 @@ module.exports = async function handler(req, res) {
       timestamp: new Date().toISOString()
     };
     
-    console.log('✅ Returning', alerts.length, 'alerts');
-    res.status(200).json(result);
-    
-  } catch (error) {
-    console.error('❌ Error fetching alerts:', error);
-    res.status(500).json({ 
-      error: 'Failed to fetch alerts',
-      details: error.message 
-    });
-  }
+  res.status(200).json(result);
 }
