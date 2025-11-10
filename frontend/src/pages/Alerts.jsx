@@ -61,8 +61,13 @@ function Alerts() {
       // Reset cleared state since we're generating new alerts
       setIsCleared(false)
       
-      // Refresh the alerts list
-      await fetchAlerts()
+      // Add the generated alerts to the current list
+      if (response.data.alerts) {
+        setAlerts(prevAlerts => [...response.data.alerts, ...prevAlerts])
+      } else {
+        // Fallback: refresh the alerts list
+        await fetchAlerts()
+      }
       
       alert(`✅ Generated ${alertCount} alerts successfully!`)
     } catch (error) {

@@ -1,5 +1,36 @@
 // Vercel serverless function for simulating alerts
-const { generateMockAlert, addAlerts, getStateInfo } = require('../_shared/state.js');
+
+// Simple UUID generator
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// Generate mock alert
+function generateMockAlert() {
+  const threatIPs = ['192.168.1.100', '10.0.0.50', '172.16.0.25', '203.0.113.45'];
+  const attackTypes = ['SQL Injection', 'XSS Attack', 'Brute Force', 'DDoS', 'Port Scan'];
+  const severityLevels = ['low', 'medium', 'high', 'critical'];
+  
+  return {
+    id: generateUUID(),
+    timestamp: new Date().toISOString(),
+    threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
+    target_ip: '192.168.1.10',
+    attack_type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
+    severity: severityLevels[Math.floor(Math.random() * severityLevels.length)],
+    blocked: Math.random() > 0.3,
+    details: {
+      port: Math.floor(Math.random() * 65535),
+      protocol: Math.random() > 0.5 ? 'TCP' : 'UDP',
+      payload_size: Math.floor(Math.random() * 10000),
+      user_agent: 'Mozilla/5.0 (compatible; AttackBot/1.0)'
+    }
+  };
+}
 
 module.exports = async function handler(req, res) {
   // Enable CORS
@@ -27,15 +58,12 @@ module.exports = async function handler(req, res) {
       alerts.push(generateMockAlert());
     }
     
-    // Add the alerts to the shared state
-    const totalAlerts = addAlerts(alerts);
-    
     const result = {
       message: 'Simulation completed successfully',
       simulated: count,
       alerts: alerts,
       timestamp: new Date().toISOString(),
-      totalAlertsNow: totalAlerts,
+      totalAlertsNow: count,
       summary: {
         total_alerts: count,
         high_severity: alerts.filter(a => a.severity === 'high' || a.severity === 'critical').length,
