@@ -1,44 +1,5 @@
 // Vercel serverless function for simulating alerts
-
-// Simple UUID generator (no external dependencies)
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-// Mock data for simulation (in production, you'd want to use a database)
-const generateMockAlert = () => {
-  const threatIPs = [
-    '192.168.1.100', '10.0.0.50', '172.16.0.25', 
-    '203.0.113.45', '198.51.100.78', '192.0.2.123'
-  ];
-  
-  const attackTypes = [
-    'SQL Injection', 'XSS Attack', 'Brute Force', 
-    'DDoS', 'Port Scan', 'Malware Detection'
-  ];
-  
-  const severityLevels = ['low', 'medium', 'high', 'critical'];
-  
-  return {
-    id: generateUUID(),
-    timestamp: new Date().toISOString(),
-    threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
-    target_ip: '192.168.1.10',
-    attack_type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
-    severity: severityLevels[Math.floor(Math.random() * severityLevels.length)],
-    blocked: Math.random() > 0.3, // 70% chance of being blocked
-    details: {
-      port: Math.floor(Math.random() * 65535),
-      protocol: Math.random() > 0.5 ? 'TCP' : 'UDP',
-      payload_size: Math.floor(Math.random() * 10000),
-      user_agent: 'Mozilla/5.0 (compatible; AttackBot/1.0)'
-    }
-  };
-};
+import { generateMockAlert, addAlerts, getStateInfo } from '../_shared/state.js';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -66,17 +27,15 @@ export default async function handler(req, res) {
       alerts.push(generateMockAlert());
     }
     
-    // In a real implementation, you would:
-    // 1. Store these in a database
-    // 2. Trigger notification workflows
-    // 3. Update statistics
+    // Add the alerts to the shared state
+    const totalAlerts = addAlerts(alerts);
     
-    // For now, we'll just return the simulated data
     const result = {
       message: 'Simulation completed successfully',
       simulated: count,
       alerts: alerts,
       timestamp: new Date().toISOString(),
+      totalAlertsNow: totalAlerts,
       summary: {
         total_alerts: count,
         high_severity: alerts.filter(a => a.severity === 'high' || a.severity === 'critical').length,

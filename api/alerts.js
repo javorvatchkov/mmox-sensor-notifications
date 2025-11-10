@@ -1,49 +1,5 @@
 // Vercel serverless function for alerts management
-
-// Simple UUID generator (no external dependencies)
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-// Mock alerts data (in production, use a database)
-const generateMockAlerts = (limit = 50) => {
-  const alerts = [];
-  const threatIPs = [
-    '192.168.1.100', '10.0.0.50', '172.16.0.25', 
-    '203.0.113.45', '198.51.100.78', '192.0.2.123'
-  ];
-  
-  const attackTypes = [
-    'SQL Injection', 'XSS Attack', 'Brute Force', 
-    'DDoS', 'Port Scan', 'Malware Detection'
-  ];
-  
-  const severityLevels = ['low', 'medium', 'high', 'critical'];
-  
-  for (let i = 0; i < limit; i++) {
-    alerts.push({
-      id: generateUUID(),
-      timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(), // Random time in last 24h
-      threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
-      target_ip: '192.168.1.10',
-      attack_type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
-      severity: severityLevels[Math.floor(Math.random() * severityLevels.length)],
-      blocked: Math.random() > 0.3,
-      details: {
-        port: Math.floor(Math.random() * 65535),
-        protocol: Math.random() > 0.5 ? 'TCP' : 'UDP',
-        payload_size: Math.floor(Math.random() * 10000),
-        user_agent: 'Mozilla/5.0 (compatible; AttackBot/1.0)'
-      }
-    });
-  }
-  
-  return alerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-};
+import { getAlerts } from './_shared/state.js';
 
 export default async function handler(req, res) {
   console.log('🔍 Alerts API called:', req.method, req.url);
@@ -73,8 +29,8 @@ export default async function handler(req, res) {
       blocked 
     } = req.query;
     
-    console.log('📊 Generating alerts with limit:', limit);
-    let alerts = generateMockAlerts(parseInt(limit));
+    console.log('📊 Fetching alerts with limit:', limit);
+    let alerts = getAlerts();
     
     // Apply filters
     if (severity) {
@@ -92,6 +48,12 @@ export default async function handler(req, res) {
     if (blocked !== undefined) {
       const isBlocked = blocked === 'true';
       alerts = alerts.filter(alert => alert.blocked === isBlocked);
+    }
+    
+    // Apply limit after filtering
+    const limitNum = parseInt(limit);
+    if (limitNum > 0) {
+      alerts = alerts.slice(0, limitNum);
     }
     
     const result = {
