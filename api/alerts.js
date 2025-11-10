@@ -1,9 +1,45 @@
 // Vercel serverless function for alerts management
-const { getAlerts } = require('./_shared/state.js');
+// Simple global state
+let alertsCleared = false;
+let generatedAlerts = [];
+
+// Simple UUID generator
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// Generate mock alerts
+function generateMockAlerts(count = 50) {
+  const alerts = [];
+  const threatIPs = ['192.168.1.100', '10.0.0.50', '172.16.0.25', '203.0.113.45'];
+  const attackTypes = ['SQL Injection', 'XSS Attack', 'Brute Force', 'DDoS', 'Port Scan'];
+  const severityLevels = ['low', 'medium', 'high', 'critical'];
+  
+  for (let i = 0; i < count; i++) {
+    alerts.push({
+      id: generateUUID(),
+      timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+      threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
+      target_ip: '192.168.1.10',
+      attack_type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
+      severity: severityLevels[Math.floor(Math.random() * severityLevels.length)],
+      blocked: Math.random() > 0.3,
+      details: {
+        port: Math.floor(Math.random() * 65535),
+        protocol: Math.random() > 0.5 ? 'TCP' : 'UDP',
+        payload_size: Math.floor(Math.random() * 10000),
+        user_agent: 'Mozilla/5.0 (compatible; AttackBot/1.0)'
+      }
+    });
+  }
+  return alerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+}
 
 module.exports = async function handler(req, res) {
-  console.log('🔍 Alerts API called:', req.method, req.url);
-  
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -11,12 +47,10 @@ module.exports = async function handler(req, res) {
   
   // Handle preflight request
   if (req.method === 'OPTIONS') {
-    console.log('✅ OPTIONS request handled');
     return res.status(200).end();
   }
   
   if (req.method !== 'GET') {
-    console.log('❌ Invalid method:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
   
@@ -26,11 +60,25 @@ module.exports = async function handler(req, res) {
       severity, 
       threat_ip, 
       attack_type, 
-      blocked 
+      blocked,
+      cleared 
     } = req.query;
     
-    console.log('📊 Fetching alerts with limit:', limit);
-    let alerts = getAlerts();
+    // Check if cleared parameter is passed (from frontend after clear operation)
+    if (cleared === 'true') {
+      alertsCleared = true;
+      generatedAlerts = [];
+      return res.status(200).json({
+        alerts: [],
+        total: 0,
+        filters: { severity, threat_ip, attack_type, blocked },
+        timestamp: new Date().toISOString(),
+        message: 'No alerts - data was cleared'
+      });
+    }
+    
+    // Initialize with mock data if not cleared and no generated alerts
+    let alerts = generatedAlerts.length > 0 ? generatedAlerts : generateMockAlerts(50);
     
     // Apply filters
     if (severity) {

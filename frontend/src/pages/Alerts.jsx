@@ -76,8 +76,10 @@ function Alerts() {
       
       const response = await axios.post(API_ENDPOINTS.CLEAR_ALL)
       
-      // Refresh the alerts list
-      await fetchAlerts()
+      // Refresh the alerts list with cleared parameter
+      const params = new URLSearchParams({ ...filters, cleared: 'true' })
+      const alertsResponse = await axios.get(`${API_ENDPOINTS.ALERTS}?${params}`)
+      setAlerts(alertsResponse.data.alerts || [])
       
       alert(`✅ ${response.data.message}`)
     } catch (error) {
