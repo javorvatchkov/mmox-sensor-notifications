@@ -1,5 +1,13 @@
 // Vercel serverless function for alerts management
-const { v4: uuidv4 } = require('uuid');
+
+// Simple UUID generator (no external dependencies)
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 // Mock alerts data (in production, use a database)
 const generateMockAlerts = (limit = 50) => {
@@ -18,7 +26,7 @@ const generateMockAlerts = (limit = 50) => {
   
   for (let i = 0; i < limit; i++) {
     alerts.push({
-      id: uuidv4(),
+      id: generateUUID(),
       timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(), // Random time in last 24h
       threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
       target_ip: '192.168.1.10',
@@ -38,6 +46,8 @@ const generateMockAlerts = (limit = 50) => {
 };
 
 export default async function handler(req, res) {
+  console.log('🔍 Alerts API called:', req.method, req.url);
+  
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -45,10 +55,12 @@ export default async function handler(req, res) {
   
   // Handle preflight request
   if (req.method === 'OPTIONS') {
+    console.log('✅ OPTIONS request handled');
     return res.status(200).end();
   }
   
   if (req.method !== 'GET') {
+    console.log('❌ Invalid method:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
   
@@ -61,6 +73,7 @@ export default async function handler(req, res) {
       blocked 
     } = req.query;
     
+    console.log('📊 Generating alerts with limit:', limit);
     let alerts = generateMockAlerts(parseInt(limit));
     
     // Apply filters
@@ -93,6 +106,7 @@ export default async function handler(req, res) {
       timestamp: new Date().toISOString()
     };
     
+    console.log('✅ Returning', alerts.length, 'alerts');
     res.status(200).json(result);
     
   } catch (error) {

@@ -1,5 +1,13 @@
 // Vercel serverless function for simulating alerts
-const { v4: uuidv4 } = require('uuid');
+
+// Simple UUID generator (no external dependencies)
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 // Mock data for simulation (in production, you'd want to use a database)
 const generateMockAlert = () => {
@@ -16,7 +24,7 @@ const generateMockAlert = () => {
   const severityLevels = ['low', 'medium', 'high', 'critical'];
   
   return {
-    id: uuidv4(),
+    id: generateUUID(),
     timestamp: new Date().toISOString(),
     threat_ip: threatIPs[Math.floor(Math.random() * threatIPs.length)],
     target_ip: '192.168.1.10',
