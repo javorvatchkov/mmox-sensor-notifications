@@ -1,7 +1,7 @@
 {
-  "name": "mmox-sensor-monitor",
+  "name": "sensor-monitor",
   "version": "1.0.0",
-  "description": "MMOX Sensor Monitor Service - Publishes alert events",
+  "description": "Sensor Monitor Service - Publishes alert events",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,7 +1,7 @@
 {
-  "name": "mmox-notification-service",
+  "name": "notification-service",
   "version": "1.0.0",
-  "description": "MMOX Notification Service - Consumes alerts and manages notifications",
+  "description": "Notification Service - Consumes alerts and manages notifications",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

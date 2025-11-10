@@ -1,7 +1,7 @@
 {
-  "name": "mmox-sensor-notifications",
+  "name": "sensor-notifications",
   "version": "1.0.0",
-  "description": "MMOX Cybersecurity Alert Management System",
+  "description": "Cybersecurity Alert Management System",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:sensor\" \"npm run dev:notification\" \"npm run dev:email-producer\" \"npm run dev:email-listener\" \"npm run dev:frontend\"",
@@ -19,8 +19,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "health:check": "concurrently \"curl -s http://localhost:3001/health\" \"curl -s http://localhost:3002/health\" \"curl -s http://localhost:3003/health\" \"curl -s http://localhost:3004/health\""
   },
-  "keywords": ["cybersecurity", "alerts", "notifications", "mmox"],
-  "author": "MMOX Team",
+  "keywords": ["cybersecurity", "alerts", "notifications", "security"],
+  "author": "Development Team",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2"

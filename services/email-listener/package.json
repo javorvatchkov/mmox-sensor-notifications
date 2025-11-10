@@ -1,7 +1,7 @@
 {
-  "name": "mmox-email-listener",
+  "name": "email-listener",
   "version": "1.0.0",
-  "description": "MMOX Email Listener - Sends notification emails via SMTP",
+  "description": "Email Listener - Sends notification emails via SMTP",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

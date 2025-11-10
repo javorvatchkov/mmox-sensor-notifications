@@ -1,7 +1,7 @@
 {
-  "name": "mmox-email-producer",
+  "name": "email-producer",
   "version": "1.0.0",
-  "description": "MMOX Email Producer - Single instance worker for email bundling",
+  "description": "Email Producer - Single instance worker for email bundling",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

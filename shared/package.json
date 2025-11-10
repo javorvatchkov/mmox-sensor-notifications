@@ -1,7 +1,7 @@
 {
-  "name": "mmox-shared",
+  "name": "shared-utilities",
   "version": "1.0.0",
-  "description": "Shared utilities for MMOX sensor notifications system",
+  "description": "Shared utilities for sensor notifications system",
   "main": "index.js",
   "dependencies": {
     "redis": "^4.6.10",
