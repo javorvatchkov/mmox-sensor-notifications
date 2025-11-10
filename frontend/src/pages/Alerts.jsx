@@ -10,6 +10,7 @@ function Alerts() {
   const [clearLoading, setClearLoading] = useState(false)
   const [generateLoading, setGenerateLoading] = useState(false)
   const [alertCount, setAlertCount] = useState(5)
+  const [isCleared, setIsCleared] = useState(false) // Track if alerts were cleared
   const [filters, setFilters] = useState({
     direction: '',
     country: '',
@@ -18,7 +19,7 @@ function Alerts() {
 
   useEffect(() => {
     fetchAlerts()
-  }, [filters])
+  }, [filters, isCleared])
 
   const fetchAlerts = async () => {
     try {
@@ -27,6 +28,11 @@ function Alerts() {
       Object.entries(filters).forEach(([key, value]) => {
         if (value) params.append(key, value)
       })
+      
+      // If alerts were cleared, add the cleared parameter
+      if (isCleared) {
+        params.append('cleared', 'true')
+      }
       
       const response = await axios.get(`${API_ENDPOINTS.ALERTS}?${params}`)
       setAlerts(response.data.alerts || [])
@@ -52,6 +58,9 @@ function Alerts() {
         count: alertCount
       })
       
+      // Reset cleared state since we're generating new alerts
+      setIsCleared(false)
+      
       // Refresh the alerts list
       await fetchAlerts()
       
@@ -76,10 +85,9 @@ function Alerts() {
       
       const response = await axios.post(API_ENDPOINTS.CLEAR_ALL)
       
-      // Refresh the alerts list with cleared parameter
-      const params = new URLSearchParams({ ...filters, cleared: 'true' })
-      const alertsResponse = await axios.get(`${API_ENDPOINTS.ALERTS}?${params}`)
-      setAlerts(alertsResponse.data.alerts || [])
+      // Set cleared state and refresh alerts
+      setIsCleared(true)
+      setAlerts([]) // Immediately clear the UI
       
       alert(`✅ ${response.data.message}`)
     } catch (error) {
