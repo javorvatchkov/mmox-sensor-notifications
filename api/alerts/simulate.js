@@ -14,6 +14,7 @@ function generateMockAlert() {
   const threatIPs = ['192.168.1.100', '10.0.0.50', '172.16.0.25', '203.0.113.45'];
   const attackTypes = ['SQL Injection', 'XSS Attack', 'Brute Force', 'DDoS', 'Port Scan'];
   const severityLevels = ['low', 'medium', 'high', 'critical'];
+  const customerIds = ['cust-001', 'cust-002', 'cust-003', 'cust-004', 'cust-005'];
   
   return {
     id: generateUUID(),
@@ -23,6 +24,7 @@ function generateMockAlert() {
     attack_type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
     severity: severityLevels[Math.floor(Math.random() * severityLevels.length)],
     blocked: Math.random() > 0.3,
+    customer_id: customerIds[Math.floor(Math.random() * customerIds.length)],
     details: {
       port: Math.floor(Math.random() * 65535),
       protocol: Math.random() > 0.5 ? 'TCP' : 'UDP',
