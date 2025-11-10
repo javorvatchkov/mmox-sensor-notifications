@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Bell, Mail, MailCheck, RefreshCw, Trash2, Search, X, Clock, Globe, AlertTriangle, Shield } from 'lucide-react'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../config/api'
 
 function Notifications() {
   const [notifications, setNotifications] = useState([])
@@ -21,7 +22,7 @@ function Notifications() {
   const fetchNotifications = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('/api/notifications?limit=100')
+      const response = await axios.get(`${API_ENDPOINTS.NOTIFICATIONS}?limit=100`)
       setNotifications(response.data.notifications || [])
       setError(null)
     } catch (err) {
@@ -37,7 +38,7 @@ function Notifications() {
       setCheckLoading(true)
       setError(null)
       
-      const response = await axios.post('/api/check-alerts')
+      const response = await axios.post(API_ENDPOINTS.CHECK_ALERTS)
       
       // Refresh the notifications list
       await fetchNotifications()
@@ -67,7 +68,7 @@ function Notifications() {
       setClearLoading(true)
       setError(null)
       
-      const response = await axios.post('/api/clear-all')
+      const response = await axios.post(API_ENDPOINTS.CLEAR_ALL)
       
       // Refresh the notifications list
       await fetchNotifications()
@@ -88,7 +89,7 @@ function Notifications() {
       setDetailsLoading(true)
       
       // Fetch related alerts for this notification
-      const response = await axios.get('/api/alerts', {
+      const response = await axios.get(API_ENDPOINTS.ALERTS, {
         params: {
           threat_ip: notification.threat_ip,
           limit: 100
