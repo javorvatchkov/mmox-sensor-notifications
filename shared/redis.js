@@ -1,5 +1,6 @@
 const redis = require('redis');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 class RedisClient {
     constructor() {
