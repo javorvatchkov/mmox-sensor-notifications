@@ -1,4 +1,4 @@
-# Sensor Notifications System - Setup Guide
+# NISTO Sensor Notifications System - Setup Guide
 
 ## 🚀 Quick Start
 

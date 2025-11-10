@@ -19,19 +19,27 @@ class Database {
         console.log('✅ Mock Database disconnected');
     }
 
-    // Mock collection method
+    // Mock collection method with full MongoDB-like API
     collection(name) {
+        const mockCursor = {
+            sort: () => mockCursor,
+            limit: () => mockCursor,
+            skip: () => mockCursor,
+            toArray: async () => {
+                console.log(`🔍 Mock find.toArray in ${name}`);
+                return []; // Return empty array
+            }
+        };
+
         return {
             findOne: async (query) => {
                 console.log(`🔍 Mock findOne in ${name}:`, query);
                 return null; // Return null for all queries
             },
-            find: () => ({
-                toArray: async () => {
-                    console.log(`🔍 Mock find in ${name}`);
-                    return []; // Return empty array
-                }
-            }),
+            find: (query = {}) => {
+                console.log(`🔍 Mock find in ${name}:`, query);
+                return mockCursor;
+            },
             insertOne: async (doc) => {
                 console.log(`📝 Mock insertOne in ${name}:`, doc);
                 return { insertedId: 'mock-id-' + Date.now() };
@@ -40,16 +48,23 @@ class Database {
                 console.log(`📝 Mock updateOne in ${name}:`, filter, update);
                 return { modifiedCount: 1 };
             },
+            deleteOne: async (filter) => {
+                console.log(`🗑️ Mock deleteOne in ${name}:`, filter);
+                return { deletedCount: 1 };
+            },
             countDocuments: async (filter) => {
                 console.log(`🔢 Mock countDocuments in ${name}:`, filter);
                 return Math.floor(Math.random() * 100);
             },
-            aggregate: () => ({
-                toArray: async () => {
-                    console.log(`🔍 Mock aggregate in ${name}`);
-                    return [];
-                }
-            })
+            aggregate: (pipeline) => {
+                console.log(`🔍 Mock aggregate in ${name}:`, pipeline);
+                return {
+                    toArray: async () => {
+                        console.log(`🔍 Mock aggregate.toArray in ${name}`);
+                        return [];
+                    }
+                };
+            }
         };
     }
 

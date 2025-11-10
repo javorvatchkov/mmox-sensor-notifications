@@ -1,7 +1,7 @@
 {
-  "name": "sensor-notifications",
+  "name": "nisto-sensor-notifications",
   "version": "1.0.0",
-  "description": "Cybersecurity Alert Management System",
+  "description": "NISTO Cybersecurity Alert Management System",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:sensor\" \"npm run dev:notification\" \"npm run dev:email-producer\" \"npm run dev:email-listener\" \"npm run dev:frontend\"",

@@ -1,4 +1,4 @@
-# Sensor Notifications System
+# NISTO Sensor Notifications System
 
 A cybersecurity alert management platform that processes sensor data, bundles alerts, and sends notifications.
 
