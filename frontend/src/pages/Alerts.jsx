@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Shield, Filter, RefreshCw, Trash2, Zap, AlertTriangle } from 'lucide-react'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../config/api'
 
 function Alerts() {
   const [alerts, setAlerts] = useState([])
@@ -27,7 +28,7 @@ function Alerts() {
         if (value) params.append(key, value)
       })
       
-      const response = await axios.get(`/api/alerts?${params}`)
+      const response = await axios.get(`${API_ENDPOINTS.ALERTS}?${params}`)
       setAlerts(response.data.alerts || [])
       setError(null)
     } catch (err) {
@@ -47,7 +48,7 @@ function Alerts() {
       setGenerateLoading(true)
       setError(null)
       
-      const response = await axios.post('http://localhost:3001/api/alerts/simulate', {
+      const response = await axios.post(API_ENDPOINTS.SIMULATE_ALERTS, {
         count: alertCount
       })
       
@@ -73,7 +74,7 @@ function Alerts() {
       setClearLoading(true)
       setError(null)
       
-      const response = await axios.post('/api/clear-all')
+      const response = await axios.post(API_ENDPOINTS.CLEAR_ALL)
       
       // Refresh the alerts list
       await fetchAlerts()

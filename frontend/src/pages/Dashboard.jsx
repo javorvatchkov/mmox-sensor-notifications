@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Shield, Bell, AlertTriangle, CheckCircle } from 'lucide-react'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../config/api'
 
 function Dashboard() {
   const [stats, setStats] = useState(null)
@@ -15,7 +16,7 @@ function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('/api/stats')
+      const response = await axios.get(API_ENDPOINTS.STATS)
       setStats(response.data)
       setError(null)
     } catch (err) {
