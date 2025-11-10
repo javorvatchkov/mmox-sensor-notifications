@@ -1,6 +1,6 @@
 // Vercel serverless function for clearing all data
-import { clearAllAlerts, getStateInfo } from './_shared/state.js';
-export default async function handler(req, res) {
+const { clearAllAlerts, getStateInfo } = require('./_shared/state.js');
+module.exports = async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');

@@ -10,7 +10,7 @@ let globalState = {
 };
 
 // Simple UUID generator
-export function generateUUID() {
+function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = Math.random() * 16 | 0;
     const v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -19,7 +19,7 @@ export function generateUUID() {
 }
 
 // Generate mock alert data
-export function generateMockAlert() {
+function generateMockAlert() {
   const threatIPs = [
     '192.168.1.100', '10.0.0.50', '172.16.0.25', 
     '203.0.113.45', '198.51.100.78', '192.0.2.123'
@@ -65,7 +65,7 @@ function initializeAlerts() {
 }
 
 // Get all alerts
-export function getAlerts() {
+function getAlerts() {
   if (globalState.isCleared) {
     console.log('📭 Returning empty alerts (cleared state)');
     return [];
@@ -76,7 +76,7 @@ export function getAlerts() {
 }
 
 // Add new alerts (from simulation)
-export function addAlerts(newAlerts) {
+function addAlerts(newAlerts) {
   if (!Array.isArray(newAlerts)) {
     newAlerts = [newAlerts];
   }
@@ -89,7 +89,7 @@ export function addAlerts(newAlerts) {
 }
 
 // Clear all alerts
-export function clearAllAlerts() {
+function clearAllAlerts() {
   const clearedCount = globalState.alerts.length;
   globalState.alerts = [];
   globalState.isCleared = true;
@@ -104,10 +104,20 @@ export function clearAllAlerts() {
 }
 
 // Get state info
-export function getStateInfo() {
+function getStateInfo() {
   return {
     alertCount: globalState.alerts.length,
     isCleared: globalState.isCleared,
     lastClearTime: globalState.lastClearTime
   };
 }
+
+// CommonJS exports
+module.exports = {
+  generateUUID,
+  generateMockAlert,
+  getAlerts,
+  addAlerts,
+  clearAllAlerts,
+  getStateInfo
+};

@@ -1,7 +1,7 @@
 // Vercel serverless function for alerts management
-import { getAlerts } from './_shared/state.js';
+const { getAlerts } = require('./_shared/state.js');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   console.log('🔍 Alerts API called:', req.method, req.url);
   
   // Enable CORS
