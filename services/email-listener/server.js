@@ -253,7 +253,7 @@ async function sendEmail(emailJob) {
         // Real email sending
         const mailOptions = {
             from: {
-                name: process.env.FROM_NAME || 'MMOX Security System',
+                name: process.env.FROM_NAME || 'Security System',
                 address: process.env.FROM_EMAIL
             },
             to: emailJob.recipient_email,
@@ -340,8 +340,8 @@ app.post('/api/test-email', async (req, res) => {
         const testEmailJob = {
             id: 'test-' + Date.now(),
             recipient_email: to,
-            subject: subject || 'MMOX Test Email',
-            body: body || 'This is a test email from MMOX Email Listener Service.',
+            subject: subject || 'Test Email',
+            body: body || 'This is a test email from Email Listener Service.',
             attempts: 0
         };
 

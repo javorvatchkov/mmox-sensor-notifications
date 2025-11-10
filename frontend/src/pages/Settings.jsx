@@ -19,8 +19,8 @@ function Settings() {
       
       const response = await axios.post('http://localhost:3004/api/test-email', {
         to: testEmail,
-        subject: 'MMOX Test Email',
-        body: 'This is a test email from the MMOX Sensor Notifications system. If you receive this, the email service is working correctly.'
+        subject: 'Test Email',
+        body: 'This is a test email from the Sensor Notifications system. If you receive this, the email service is working correctly.'
       })
       
       if (response.data.success) {

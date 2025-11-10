@@ -28,8 +28,8 @@ function Layout({ children }) {
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center">
                 <Activity className="h-8 w-8 text-primary-600" />
-                <span className="ml-2 text-xl font-bold text-gray-900">MMOX</span>
-                <span className="ml-1 text-sm text-gray-500">Sensor Notifications</span>
+                <span className="ml-2 text-xl font-bold text-gray-900">Sensor</span>
+                <span className="ml-1 text-sm text-gray-500">Notifications</span>
               </div>
               
               {/* Navigation Links */}

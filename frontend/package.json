@@ -1,7 +1,7 @@
 {
-  "name": "mmox-frontend",
+  "name": "frontend-dashboard",
   "version": "1.0.0",
-  "description": "MMOX Frontend Dashboard - View alerts and notifications",
+  "description": "Frontend Dashboard - View alerts and notifications",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

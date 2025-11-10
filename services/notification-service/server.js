@@ -463,7 +463,7 @@ Threat Details:
 Please review your security systems and take appropriate action.
 
 Best regards,
-MMOX Security Team
+Security Team
                     `.trim(),
                     priority: notification.alert_count > 10 ? 'high' : notification.alert_count > 5 ? 'medium' : 'low',
                     status: 'pending',

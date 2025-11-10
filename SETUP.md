@@ -1,4 +1,4 @@
-# MMOX Sensor Notifications System - Setup Guide
+# Sensor Notifications System - Setup Guide
 
 ## 🚀 Quick Start
 

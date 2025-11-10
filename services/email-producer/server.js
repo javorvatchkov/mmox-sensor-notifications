@@ -267,7 +267,7 @@ function createEmailSubject(notification, alerts) {
     const threatIP = notification.threat_ip;
     const countries = notification.countries ? notification.countries.join(', ') : 'Unknown';
     
-    return `🚨 MMOX Security Alert: ${threatCount} threat${threatCount > 1 ? 's' : ''} detected from ${threatIP} (${countries})`;
+    return `🚨 Security Alert: ${threatCount} threat${threatCount > 1 ? 's' : ''} detected from ${threatIP} (${countries})`;
 }
 
 // Create email body content
@@ -281,7 +281,7 @@ function createEmailBody(notification, alerts) {
 
     let body = `Dear ${customerName},
 
-🚨 MMOX SECURITY ALERT 🚨
+🚨 SECURITY ALERT 🚨
 
 We have detected ${alertCount} security threat${alertCount > 1 ? 's' : ''} from IP address ${threatIP}.
 
@@ -318,16 +318,16 @@ RECOMMENDED ACTIONS:
 • Review your network security policies
 • Consider blocking the threat IP: ${threatIP}
 • Monitor for additional suspicious activity
-• Contact MMOX support if you need assistance
+• Contact support if you need assistance
 
-This is an automated security notification from your MMOX sensor system.
+This is an automated security notification from your sensor system.
 
 Best regards,
-MMOX Security Team
+Security Team
 
 ---
 This email was generated automatically. Please do not reply to this email.
-For support, contact: support@mmox.com
+For support, contact: support@example.com
 `;
 
     return body;
